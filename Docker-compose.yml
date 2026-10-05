@@ -37,7 +37,7 @@ services:
   phpmyadmin:
     image: phpmyadmin
     depends_on:
-      -mysql
+      - mysql
     container_name: PMA_Container
     ports: ["8080:80"]
     restart: always
@@ -50,7 +50,7 @@ services:
   mysql:
     image: mysql
     container_name: MYSQL_Container
-    ports: ["3307:3305"]
+    ports: ["3307:3306"]
     restart: always
     volumes:
       - ./database:/docker-entrypoint-iniydb.d
