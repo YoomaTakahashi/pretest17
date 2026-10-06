@@ -99,7 +99,7 @@ onMounted(fecth)
 
 const bg = (role:string)=>{
     if(role === 'ฝ่ายบุคลากร')return '#647687'
-    if(role === 'กรรมการประเม')return '#007FFF'
+    if(role === 'กรรมการประเมิน')return '#007FFF'
     if(role === 'ผู้รับการประเมินผล')return '#7d0c14'
 }
 </script>
