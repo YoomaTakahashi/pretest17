@@ -8,6 +8,7 @@
                         <h1 class="text-center text-h5">สมัครสมาชิก</h1>
                     </v-card-title>
                     <v-card-text class="bg-white">
+                        <br>
                         <v-form @submit.prevent="saveMember">
                             <v-row>
                                 <v-col cols="12" md="6">
@@ -54,6 +55,9 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios'
+import { api } from '../API/base'
+
 
 definePageMeta({
 
@@ -104,7 +108,15 @@ const saveMember = async()=>{
     if(!validateForm)return
     const formdata = new FormData
     formdata.append('pic_user',pic_user.value!)
-    
+    formdata.append('form',JSON.stringify(form.value))
+    try {
+        await axios.post(`${api}/auht/regis`,formdata)
+        alert('ทำรายการสำเร็จ')
+        navigateTo('/',{replace:true})
+    } catch (error) {
+        console.error("error regis",error);
+        
+    }
 }
 </script>
 
