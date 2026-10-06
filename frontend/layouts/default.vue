@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-app-bar :color="bg(user.role)">
+        <v-app-bar :color="bg(user.role)" flat :elevation="5"class="rounded-b-xl">
             <v-app-bar-nav-icon @click="drawer = !drawer" />
             <v-toolbar-title class="font-weight-bold">NTC EVALUATION SYSTEM</v-toolbar-title>
             <v-spacer></v-spacer>
@@ -98,7 +98,7 @@ const fecth = async()=>{
 onMounted(fecth)
 
 const bg = (role:string)=>{
-    if(role === 'ฝ่ายบุคลากร')return '#687647'
+    if(role === 'ฝ่ายบุคลากร')return '#647687'
     if(role === 'กรรมการประเม')return '#007FFF'
     if(role === 'ผู้รับการประเมินผล')return '#7d0c14'
 }
