@@ -14,7 +14,7 @@
                                     <v-text-field label="ชื่อเอกสาร" v-model="name_doc" :error-messages="error.name_doc" prepend-inner-icon="mdi-file-edit"></v-text-field>
                                 </v-col>
                                 <v-col cols="12" md="6">
-                                    <v-file-input label="รูปภาพสมาชิก" v-model="file" :error-messages="error.file" accept=".pdf" hint="รองรับเฉพาะไฟล์ PDF ขนาด 10MB" persistent-hint></v-file-input>
+                                    <v-file-input label="เอกสาร" v-model="file" :error-messages="error.file" accept=".pdf" hint="รองรับเฉพาะไฟล์ PDF ขนาด 10MB" persistent-hint></v-file-input>
                                 </v-col> 
 
                             </v-row>
@@ -46,8 +46,6 @@
                                     <td class="border text-center">
                                         <v-btn class="text-center text-white ma-2" color="info" prepend-icon="mdi-eye" @click="view(items.file)" size="small">เปิดดู</v-btn>
                                     </td>
-                                    <td class="border text-center"></td>
-                                    <td class="border text-center"></td>
                                     <td class="border text-center">
                                         <center>
                                             <v-btn class="text-center text-white ma-2" color="error" @click="del(items.id_doc)" size="small">ลบ</v-btn>

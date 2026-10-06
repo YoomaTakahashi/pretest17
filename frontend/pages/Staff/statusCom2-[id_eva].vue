@@ -30,7 +30,7 @@
                                     <td class="border text-center">{{ items.fname }} {{ items.lname }}</td>
                                     <td class="border text-center">{{ items.level_commit }}</td>
                                     <td class="border text-center">
-                                        <v-btn class="text-center text-white ma-2" :color="bg(items.status_commit)" size="small">{{ items.status_commit === 'y' ? 'รอการประเมิน':'ประเมินแล้ว' }}</v-btn>
+                                        <v-btn class="text-center text-white ma-2" :color="bg(items.status_commit)" size="small">{{ items.status_commit === 'n' ? 'รอการประเมิน':'ประเมินแล้ว' }}</v-btn>
                                     </td>
                                 </tr>
                                 <tr>
@@ -153,7 +153,6 @@ const go = (id_eva:number)=>{
 
 const bg = (status_eva:string)=>{
     if(status_eva ==='n')return 'error'
-    else if(status_eva ===2)return 'warning'
     else if(status_eva ==='y')return 'success'
 }
 

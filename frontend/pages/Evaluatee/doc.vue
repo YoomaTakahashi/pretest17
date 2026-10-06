@@ -58,7 +58,7 @@ const result = ref([])
 
 const token = import.meta.client ? localStorage.getItem('token'):null
 const view = (file:string)=>{
-    const url = new URL(`/uploads/document/${file}`,api).href
+    const url = new URL(`../uploads/document/${file}`,api).href
     window.open(url,'_blank')
 }
 const fetch = async()=>{
