@@ -20,8 +20,8 @@
                             <tbody>
                                 <tr v-for="(items,index) in result" :key="items.id_eva">
                                     <td class="text-center border">{{ index+1 }}</td>
-                                    <td class="text-center border">{{ items.first_name }}</td>
-                                    <td class="text-center border">{{ items.last_name }}</td>
+                                    <td class="text-center border">{{ items.fname }}</td>
+                                    <td class="text-center border">{{ items.lname }}</td>
                                     <td class="text-center border">{{ items.day_eva }}</td>
                                     <td class="text-center border">รอบการประเมินที่ {{ items.round_sys }} ปี {{ year_sys }}</td>
                                     <td class="text-center border">{{ items.status_eva === 1 ? 'ยังไม่ได้ประเมิน' : items.status_commit === 'y' ? 'ประเมินสำเร็จ' : items.status_eva === 2 ? 'รอกรรมการประเมิน' : 'ประเมินเสร็จสิ้น' }}</td>

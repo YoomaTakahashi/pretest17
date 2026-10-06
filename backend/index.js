@@ -40,6 +40,7 @@ app.use('/api/Eva/score_commit',score_commit)
 const edit_eva = require('./routes/Eva/edit_eva')
 app.use('/api/Eva/edit_eva',edit_eva)
 
+<<<<<<< HEAD
 //staff
 const member = require('./routes/Staff/member')
 app.use('/api/Staff/member',member)
@@ -64,6 +65,11 @@ app.use('/api/Staff/doc',doc)
 
 const check_confirm = require('./routes/Commit/check_confirm')
 app.use('/api/Commit/check_confirm',check_confirm)
+=======
+const save_score = require('./routes/Commit/save_score')
+app.use('/api/Commit/save_score',save_score)
+
+>>>>>>> 9c3323ab110d3a8b8d0605600a1f1721cf059cf5
 
 app.use((req,res)=> res.status(404).json({message:'Route not found'}))
 app.listen(3001,()=>{

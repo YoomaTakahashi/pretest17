@@ -4,13 +4,13 @@ const router = express.Router()
 const {requireRole,verifyToken} = require('../../middleware/authMiddleware')
 const path = require('path')
 const uploadDir = path.join(__dirname,'../../uploads/evadetail')
-
+// Register API
 router.get('/user/:id_eva',verifyToken,requireRole('กรรมการประเมิน'),async (req,res) => {
     try{
         const id_member = req.user.id_member
         const id_eva = req.params.id_eva
         const [rows] = await db.query(
-            `select * from tb_member m,tb_eva e,tb_system s,tb_commit c where c.id_member=? and c.id_eva=? and c.id_eva=e.id_eva and c.id_member=m.id_member and e.id_sys=s.id_sys order by e.id_eva desc`,
+            `select * from tb_member m,tb_eva e,tb_system s,tb_commit c where c.id_member=? and c.id_eva=? and c.id_eva=e.id_eva and e.id_member=m.id_member and e.id_sys=s.id_sys order by e.id_eva desc`,
             [id_member,id_eva]
         )
         res.json(rows[0])
@@ -40,7 +40,7 @@ router.get('/topic/:id_eva',verifyToken,requireRole('กรรมการปร
 router.post('/save/:id_eva',verifyToken,requireRole('กรรมการประเมิน'),async (req,res) => {
     try{
         const id_member = req.user.id_member
-        const id_eva = req.params.id_ev
+        const id_eva = req.params.id_eva
         const scores = JSON.parse(req.body.scores)
         const detail_commit = req.body.detail_commit
         const [[RowCommit]] = await db.query(`select * from tb_commit where id_member=? and id_eva=?`,[id_member,id_eva])
@@ -64,6 +64,7 @@ router.post('/save/:id_eva',verifyToken,requireRole('กรรมการปร
         )
         await db.query(`update tb_eva set total_commit=? where id_eva=?`,[sumRow.total,id_eva])
         await db.query(`update tb_commit set detail_commit=?,status_commit=? where id_eva=? and id_member=?`,[detail_commit,'y',id_eva,id_member])
+        
         res.json({message:'POST Score Success'})
     }catch(err){
         console.error("Error POST Score",err)
