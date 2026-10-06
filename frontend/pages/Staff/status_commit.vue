@@ -4,7 +4,7 @@
             <v-col cols="12" md="12">
                 <v-card>
                     <v-card-title>
-                        <h1 class="text-center text-h5">สถานะการประเมินของผู้รับการประเมินผล</h1>
+                        <h1 class="text-center text-h5">สถานะการประเมินของกรรมการประเมินผล</h1>
                     </v-card-title>
                     <v-card-text>
                         <br>
@@ -16,6 +16,7 @@
                                     <th class="border text-center">รอบการประเมิน</th>
                                     <th class="border text-center">วันที่ออกแบบการประเมิน</th>
                                     <th class="border text-center">สถานะ</th>
+                                    <th class="border text-center">รายละเอียด</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -26,6 +27,9 @@
                                     <td class="border text-center">{{ formatDate(items.day_eva) }}</td>
                                     <td class="border text-center">
                                         <v-btn class="text-center text-white ma-2" :color="bg(items.status_eva)" size="small">{{ items.status_eva === 1 ? 'รอการประเมินตนเอง':items.status_eva === 2 ? 'รอกรรมการประเมิน':'ประเมินสำเร็จ' }}</v-btn>
+                                    </td>
+                                    <td class="border text-center">
+                                        <v-btn class="text-center text-white ma-2" color="info" @click="go(items.id_eva)" size="small">รายละเอียด</v-btn>
                                     </td>
                                 </tr>
                                 <tr>
@@ -144,7 +148,7 @@ const formatDate = (dateStr:string)=>{
 }
 
 const go = (id_eva:number)=>{
-    navigateTo({path:`/Staff/score_member-${id_eva}`})
+    navigateTo({path:`/Staff/statusCom2-${id_eva}`})
 }
 
 const bg = (status_eva:number)=>{

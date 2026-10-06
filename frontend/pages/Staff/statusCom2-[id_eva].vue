@@ -2,9 +2,16 @@
     <v-container>
         <v-row justify="center">
             <v-col cols="12" md="12">
+                <v-card class="mb-3">
+                    <v-card-title><h1 class="text-center text-h5">ผู้รับการประเมินผล</h1></v-card-title>
+                    <v-card-text>
+                        <p>ชื่อ-สกุล: {{ header.fname }} {{ header.lname }}</p>
+                        <p>รอบการประเมินที่: {{ header.round_sys }} ปี:{{ header.year_sys }}</p>
+                    </v-card-text>
+                </v-card>
                 <v-card>
                     <v-card-title>
-                        <h1 class="text-center text-h5">สถานะการประเมินของผู้รับการประเมินผล</h1>
+                        <h1 class="text-center text-h5">สถานะการประเมินของกรรมการประเมินผล</h1>
                     </v-card-title>
                     <v-card-text>
                         <br>
@@ -12,20 +19,18 @@
                             <thead>
                                 <tr>
                                     <th class="border text-center">ลำดับ</th>
-                                    <th class="border text-center">ผู้รับการประเมินผล</th>
-                                    <th class="border text-center">รอบการประเมิน</th>
-                                    <th class="border text-center">วันที่ออกแบบการประเมิน</th>
+                                    <th class="border text-center">กรรมการประเมิน</th>
+                                    <th class="border text-center">ตำแหน่ง</th>
                                     <th class="border text-center">สถานะ</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(items,index) in result" :key="items.id_eva">
+                                <tr v-for="(items,index) in result" :key="items.id_commit">
                                     <td class="border text-center">{{ index+1 }}</td>
                                     <td class="border text-center">{{ items.fname }} {{ items.lname }}</td>
-                                    <td class="border text-center">รอบการประเมินที่:{{ items.round_sys }} ปีการประเมิน:{{ items.year_sys }}</td>
-                                    <td class="border text-center">{{ formatDate(items.day_eva) }}</td>
+                                    <td class="border text-center">{{ items.level_commit }}</td>
                                     <td class="border text-center">
-                                        <v-btn class="text-center text-white ma-2" :color="bg(items.status_eva)" size="small">{{ items.status_eva === 1 ? 'รอการประเมินตนเอง':items.status_eva === 2 ? 'รอกรรมการประเมิน':'ประเมินสำเร็จ' }}</v-btn>
+                                        <v-btn class="text-center text-white ma-2" :color="bg(items.status_commit)" size="small">{{ items.status_commit === 'y' ? 'รอการประเมิน':'ประเมินแล้ว' }}</v-btn>
                                     </td>
                                 </tr>
                                 <tr>
@@ -45,7 +50,7 @@ import axios from 'axios'
 import { api,staff } from '../../API/base'
 
 const error = ref<Record<string,string>>({})
-const eva = ref([])
+const header = ref([])
 const round = ref([])
 
 const form = ref({
@@ -62,6 +67,7 @@ const reset = ()=>{
         day_eva:''
     }
 }
+const id_eva = useRoute().params.id_eva
 const dataResult = ref([])
 const search = ref('')
 const result = computed(()=>{
@@ -104,12 +110,10 @@ const saveMember = async()=>{
 
 const fetch = async()=>{
     try {
-        const res = await axios.get(`${staff}/eva/show`,{headers:{Authorization:`Bearer ${token}`}})
+        const res = await axios.get(`${staff}/score_commit/commit/${id_eva}`,{headers:{Authorization:`Bearer ${token}`}})
         dataResult.value = res.data
-        const evaluatee = await axios.get(`${staff}/member/showE`,{headers:{Authorization:`Bearer ${token}`}})
-        eva.value = evaluatee.data
-        const system = await axios.get(`${staff}/system/show`,{headers:{Authorization:`Bearer ${token}`}})
-        round.value = system.data
+        const evaluatee = await axios.get(`${staff}/commit/header/${id_eva}`,{headers:{Authorization:`Bearer ${token}`}})
+        header.value = evaluatee.data
     } catch (error) {
         console.error("Error get eva",error);
         
@@ -144,13 +148,13 @@ const formatDate = (dateStr:string)=>{
 }
 
 const go = (id_eva:number)=>{
-    navigateTo({path:`/Staff/score_member-${id_eva}`})
+    navigateTo({path:`/Staff/statusCom2-${id_eva}`})
 }
 
-const bg = (status_eva:number)=>{
-    if(status_eva ===1)return 'error'
+const bg = (status_eva:string)=>{
+    if(status_eva ==='n')return 'error'
     else if(status_eva ===2)return 'warning'
-    else if(status_eva ===3)return 'success'
+    else if(status_eva ==='y')return 'success'
 }
 
 onMounted(fetch)
