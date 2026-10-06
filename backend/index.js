@@ -62,6 +62,9 @@ app.use('/api/Staff/commit',commit)
 const doc = require('./routes/Staff/doc')
 app.use('/api/Staff/doc',doc)
 
+const check_confirm = require('./routes/Commit/check_confirm')
+app.use('/api/Commit/check_confirm',check_confirm)
+
 app.use((req,res)=> res.status(404).json({message:'Route not found'}))
 app.listen(3001,()=>{
     console.log("Server Running on Port 3001");

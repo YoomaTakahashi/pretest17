@@ -87,22 +87,23 @@ function validateForm(){
     const f = form.value
     error.value = {}
 
-    if(!f.fname.trim())error.value.fname = 'กรุณากรอกชื่อ'
-    if(!f.lname.trim())error.value.lname = 'กรุณากรอกนามสกุล'
-    if(!f.email.trim())error.value.email = 'กรุณากรอกอีเมล'
-    else if(!emailRegex.test(f.email.trim()))error.value.email = 'กรุณากรอกอีเมลให้ถูกต้อง'
+    if (!f.fname.trim()) error.value.fname = 'กรุณากรอกชื่อ'
+    if (!f.lname.trim()) error.value.lname = 'กรุณากรอกนามสกุล'
+    if (!f.email.trim()) error.value.email = 'กรุณากรอกอีเมล'
+    else if (!emailRegex.test(f.email.trim())) error.value.email = 'กรุณากรอกอีเมลให้ถูกต้อง'
 
-    if(!f.username.trim())error.value.username = 'กรุณากรอกชื่อผู้ใช้งาน'
-    else if(f.username.trim().length < 4)error.value.username = 'ชื่อผู้ใช้งานต้องยาวอย่างน้อย 4 ตัวอักษร'
+    if (!f.username.trim()) error.value.username = 'กรุณากรอกชื่อผู้ใช้งาน'
+    else if (f.username.trim().length < 4) error.value.username = 'ชื่อผู้ใช้งานต้องยาวอย่างน้อย 4 ตัวอักษร'
 
-    if(!f.password.trim())error.value.password = 'กรุณากรอกรหัสผ่าน'
-    else if(f.password.trim().length < 6)error.value.password = 'รหัสผ่านต้องยาวอย่างน้อย 6 ตัวอักษร'
-    else if(f.password.trim() != conP.value.trim())error.value.conP = 'รหัสผ่านไม่ตรงกัน'
+    if (!f.password.trim()) error.value.password = 'กรุณากรอกรหัสผ่าน'
+    else if (f.password.trim().length < 6) error.value.password = 'รหัสผ่านต้องยาวอย่างน้อย 6 ตัวอักษร'
+    else if (f.password.trim() != conP.value.trim()) error.value.conP = 'รหัสผ่านไม่ตรงกัน'
 
-    if(!f.role.trim())error.value.role = 'กรุณาเลือกประเภทสมาชิก'
+    if (!f.role.trim()) error.value.role = 'กรุณาเลือกประเภทสมาชิก'
 
     return Object.keys(error.value).length === 0
 }
+
 
 const saveMember = async()=>{
     if(!validateForm())return
