@@ -147,6 +147,8 @@ const go = (id_eva:number)=>{
     navigateTo({path:`/Staff/score_member-${id_eva}`})
 }
 
+const bg = ()
+
 onMounted(fetch)
 </script>
 

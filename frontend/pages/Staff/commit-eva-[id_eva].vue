@@ -120,7 +120,7 @@ const nameMap = computed(()=> Object.fromEntries(people.value.map((p)=>[p.id_mem
 const nameOf = (id:number) => nameMap.value[id]
 const MEMBER = (idx:number)=>{
     const picked = List.value.map((c,i)=>(i !== idx ? c.id_member : null))
-    return people.value.filter((p)=> !picked.includes(p))
+    return people.value.filter((p)=> !picked.includes(p.id_member))
 }
 
 const ROLE = (idx:number)=>{
