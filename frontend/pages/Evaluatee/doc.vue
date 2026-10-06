@@ -4,10 +4,10 @@
             <v-col cols="12" md="12">
                 <v-card>
                     <v-card-title>
-                        <h1 class="text-center text-h5">เอกสารและคู่มือการประเมินผล</h1>
+                        <h1 class="text-center text-h5">คู่มือการประเมินผล</h1>
                     </v-card-title>
                     <v-card-text class="bg-white">
-                        <v-text-field class="mt-3" v-model="search" label="ค้นหา" prepend-inner-icon="mdi-magnify"></v-text-field>
+                    
                         <v-table class="table mt-3">
                             <thead>
                                 <tr>
@@ -50,6 +50,7 @@ const file = ref<File | null>(null)
 const dataResult = ref([])
 const name_doc = ref('')
 const search = ref('')
+const result = ref([])
 
 
 

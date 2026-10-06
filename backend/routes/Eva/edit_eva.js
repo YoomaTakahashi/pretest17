@@ -20,7 +20,7 @@ router.put('/',verifyToken,requireRole('ผู้รับการประเ�
         const id_member = req.user.id_member
         const {fname,lname,username,password,email,role} = req.body
         if(password && password.trim()){
-            const hash = bc.hash(password,10)
+            const hash = await bc.hash(password,10)
             await db.query(`update tb_member set fname=?,lname=?,username=?,password=?,email=?,role=? where id_member=?`,[fname,lname,username,hash,email,role,id_member])
         }else{
             await db.query(`update tb_member set fname=?,lname=?,username=?,email=?,role=? where id_member=?`,[fname,lname,username,email,role,id_member])
