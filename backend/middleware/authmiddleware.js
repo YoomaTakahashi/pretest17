@@ -15,7 +15,7 @@ exports.verifyToken = (req,res,next)=>{
         res.status(403).json({message:'INVALID NO OR TOKEN'})
     }
 }
-exports.requierRole= (role)=>(req,res,next)=>{
+exports.requireRole= (role)=>(req,res,next)=>{
     try {
         if(req.user && req.user.role === role){
             return next()
