@@ -17,9 +17,14 @@ app.use('/uploads',express.static(path.join(__dirname,'./uploads')))
 const auth = require('./routes/auth')
 app.use('/api/auth',auth)
 
+const dash = require('./routes/dash')
+app.use('/api/dash',dash)
+
 const profile = require('./routes/profile')
 app.use('/api/profile',profile)
 
+
+//staff
 const member = require('./routes/Staff/member')
 app.use('/api/Staff/member',member)
 
@@ -56,6 +61,10 @@ app.use('/api/Eva/score_member',score_member)
 
 const score_commit = require('./routes/Eva/score_commit')
 app.use('/api/Eva/score_commit',score_commit)
+
+const edit_eva = require('./routes/Eva/edit_eva')
+app.use('/api/Eva/edit_eva',edit_eva)
+
 
 app.use((req,res)=> res.status(404).json({message:'Route not found'}))
 app.listen(3001,()=>{
