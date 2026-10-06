@@ -12,10 +12,15 @@ app.use(cors({
 
 app.use(fileUp())
 app.use(express.json())
-app.use('/uploads',express.static(path.join('./uploads')))
+app.use('/uploads',express.static(path.join(__dirname,'./uploads')))
+
+const auth = require('./routes/auth')
+app.use('/api/auth',auth)
 
 const profile = require('./routes/profile')
 app.use('/api/profile',profile)
+
+
 
 app.use((req,res)=> res.status(404).json({message:'Route not found'}))
 app.listen(3001,()=>{

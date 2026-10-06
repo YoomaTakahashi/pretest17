@@ -50,7 +50,11 @@ services:
   mysql:
     image: mysql
     container_name: MYSQL_Container
+<<<<<<< HEAD
     ports: ["3307:3306"]
+=======
+    ports: ["3307:3305"]
+>>>>>>> 4e8c9a94e4fe47f9d2727d30f7a64fb7399e5660
     restart: always
     volumes:
       - ./database:/docker-entrypoint-initdb.d

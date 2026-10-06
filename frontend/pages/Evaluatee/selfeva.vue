@@ -24,7 +24,9 @@
                             </v-row>
                         </v-card>
                     </v-row>
-                    
+                    <div class="text-center mt-3">
+                        <v-btn type="submit" color="blue">บันทึกคะแนน</v-btn>
+                    </div>
                 </v-form>
             </v-col>
         </v-row>
@@ -36,6 +38,67 @@ import axios from 'axios';
 import { eva } from '~/API/base';
 
 const user = ref<any>({})
+const topics = ref<any>([])
+
+const fecth = async()=>{
+    const token = localStorage.getItem('token')
+    try {
+        const res =await axios.get(`${eva}/selfeva/user`,{headers:{Authorization:`Bearer ${token}`}})
+        user.value = res.data
+    } catch (error) {
+        console.error('ERROR GET USER!',error)
+    }
+}
+const fecthTopic = async()=>{
+    const token = localStorage.getItem('token')
+    try {
+        const res =await axios.get(`${eva}/selfeva/topic`,{headers:{Authorization:`Bearer ${token}`}})
+        topics.value = res.data
+    } catch (error) {
+        console.error('ERROR GET TOPIC!',error)
+    }
+}
+
+onMounted(async()=>{
+    await Promise.all([fecth(),fecthTopic()])
+})
+const fileMap = ref<Record<string,File>>({})
+const onFilechange = ($event:Event,id_topic:number,id_indicate:number) =>{
+    const file = (event?.target as HTMLInputElement)?.files?.[1]
+    if(!file)return
+    fileMap.value[`${id_topic}-${id_indicate}`] = file
+}
+
+const saveScore = async()=>{
+    const token = localStorage.getItem('token')
+    const formdata = new FormData()
+    const allScore = topics.value.flatMap((t:any)=> 
+    t.indicates.map((i:any)=>{
+        const key = `${t.id_topic}-${i.id_indicate}`
+        const file = fileMap.value[key]
+        if(file)formdata.append(`file_${key}`,file)
+        return{
+            id_topic:t.id_topic,
+            id_indicate:i.id_indicate,
+            score:i.score,
+            detail_eva:i.detail_eva,
+            file_key:file ? `file_${key}` :null     
+        }
+    })
+    )
+    if(allScore.some((s:any)=> !s.score)){
+        alert('กรุณากรอกคะแนนให้สมบูรณ์')
+        return
+    }
+    formdata.append('scores',JSON.stringify(allScore))
+    try {
+        await axios.post(`${eva}/selfeva/save`,formdata,{headers:{Authorization:`Bearer ${token}`}})
+        alert('ประเมินสำเร็จ')
+        await Promise.all([fecth(),fecthTopic()])
+    } catch (error) {
+        console.error('error post scores',error)
+    }
+}
 </script>
 
 <style scoped>
