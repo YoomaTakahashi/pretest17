@@ -1,7 +1,7 @@
 const express =require('express')
 const db = require('../db')
 const router = express.Router()
-const {verifyToken} =require('../middleware/authmiddlware')
+const {verifyToken} =require('../middleware/authmiddleware')
 
 router.get('/',verifyToken,async (req,res) => {
     try {
