@@ -54,13 +54,13 @@ INSERT INTO `tb_eva` (`id_eva`, `id_member`, `id_sys`, `status_eva`, `day_eva`, 
 
 CREATE TABLE `tb_evadetail` (
   `id_detail` int NOT NULL,
-  `id_eva` int DEFAULT NULL,
-  `id_indicate` int DEFAULT NULL,
-  `status_eva` int DEFAULT NULL,
-  `detail_eva` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `id_eva` int NOT NULL,
+  `id_indicate` int NOT NULL,
+  `status_eva` int NOT NULL,
+  `detail_eva` text NOT NULL,
   `score_member` int DEFAULT NULL,
   `score_commit` int DEFAULT NULL,
-  `file_eva` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
+  `file_eva` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -68,26 +68,98 @@ CREATE TABLE `tb_evadetail` (
 --
 
 INSERT INTO `tb_evadetail` (`id_detail`, `id_eva`, `id_indicate`, `status_eva`, `detail_eva`, `score_member`, `score_commit`, `file_eva`) VALUES
-(1, 2, NULL, 1, 'test', 1, NULL, NULL),
-(2, 2, NULL, 1, 'teste', 2, NULL, NULL),
-(3, 2, NULL, 1, 'test', 3, NULL, NULL),
-(4, 2, NULL, 1, 'tesdgsdg', 4, NULL, NULL),
-(5, 2, NULL, 1, 'test', 1, NULL, NULL),
-(6, 2, NULL, 1, 'teste', 2, NULL, NULL),
-(7, 2, NULL, 1, 'test', 3, NULL, NULL),
-(8, 2, NULL, 1, 'tesdgsdg', 4, NULL, NULL),
-(9, 2, NULL, 1, 'test', 1, NULL, NULL),
-(10, 2, NULL, 1, 'teste', 2, NULL, NULL),
-(11, 2, NULL, 1, 'test', 3, NULL, NULL),
-(12, 2, NULL, 1, 'tesdgsdg', 4, NULL, NULL),
-(13, 2, NULL, 1, 'test', 1, NULL, NULL),
-(14, 2, NULL, 1, 'teste', 2, NULL, NULL),
-(15, 2, NULL, 1, 'test', 3, NULL, NULL),
-(16, 2, NULL, 1, 'tesdgsdg', 4, NULL, NULL),
-(17, 3, 1, 1, 'kjksdjf', 1, NULL, NULL),
-(18, 3, 2, 1, 'dsflkajdskf', 2, NULL, NULL),
-(19, 3, 3, 1, 'sdjaflkadsf', 3, NULL, NULL),
-(20, 3, 4, 1, 'jaksdlfa;', 4, NULL, NULL);
+(1, 1, 1, 1, '', 5, NULL, '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_indicate`
+--
+
+CREATE TABLE `tb_indicate` (
+  `id_indicate` int NOT NULL,
+  `id_topic` int NOT NULL,
+  `name_indicate` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `point_indicate` int NOT NULL,
+  `detail_indicate` text NOT NULL,
+  `check_indicate` varchar(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `tb_indicate`
+--
+
+INSERT INTO `tb_indicate` (`id_indicate`, `id_topic`, `name_indicate`, `point_indicate`, `detail_indicate`, `check_indicate`) VALUES
+(1, 1, 'การสร้างสื่อการสอน', 3, 'ความสร้างสรรค์ในการสร้างสื่อ', 'y');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_member`
+--
+
+CREATE TABLE `tb_member` (
+  `id_member` int NOT NULL,
+  `fname` varchar(100) NOT NULL,
+  `lname` varchar(100) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `role` enum('ฝ่ายบุคลากร','ผู้รับการประเมินผล','กรรมการประเมิน') NOT NULL,
+  `pic_user` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `tb_member`
+--
+
+INSERT INTO `tb_member` (`id_member`, `fname`, `lname`, `username`, `email`, `role`, `pic_user`, `password`) VALUES
+(1, 'test', 'tests', 'test', 'test@gmail.com', 'ผู้รับการประเมินผล', '', '123456'),
+(3, 'staff', 'staff', 'staff', 'staff@gmail.com', 'ฝ่ายบุคลากร', '1791264187740.png', '$2b$10$1RXyGvywskbA9xECDivKnOBWaZWK/Abv9JQJKJXIIazz4jKzXV.oq'),
+(4, 'eva', 'eva', 'evalua', 'eva@gmail.com', 'ผู้รับการประเมินผล', NULL, '$2b$10$UW0eLLoQCeuc8URRe5Rx.eEWmecRluN.N0agWcayodF/1C2mXtKc2'),
+(5, 'commit', 'commit', 'commit', 'commit@gmail.com', 'กรรมการประเมิน', NULL, '$2b$10$5vbwixcKb3vyzQd0eh/4leDmpMkfsK3L1Y2mZzS8p6XvZWwdYhQcC'),
+(6, 'commit2', 'commit2', 'commit2', 'commit2@gmail.com', 'กรรมการประเมิน', NULL, '$2b$10$Ziho24HcmMIusBfIc92oxuNXtdHgKjV8QcKWJGAoWLkLjGohqkll.'),
+(7, 'commit3', 'commit3', 'commit3', 'commit3@gmail.com', 'กรรมการประเมิน', NULL, '$2b$10$aA0IcAx/KPvaDOv78Aq2h.Vxcmlbw3xUy79g9lCnt2A5Dqwi6H8i.');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_system`
+--
+
+CREATE TABLE `tb_system` (
+  `id_sys` int NOT NULL,
+  `day_open` date NOT NULL,
+  `day_out` date NOT NULL,
+  `round_sys` int NOT NULL,
+  `year_sys` int NOT NULL,
+  `status_sys` varchar(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `tb_system`
+--
+
+INSERT INTO `tb_system` (`id_sys`, `day_open`, `day_out`, `round_sys`, `year_sys`, `status_sys`) VALUES
+(3, '2026-10-07', '2026-10-06', 1, 2569, 'y');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_topic`
+--
+
+CREATE TABLE `tb_topic` (
+  `id_topic` int NOT NULL,
+  `name_topic` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `tb_topic`
+--
+
+INSERT INTO `tb_topic` (`id_topic`, `name_topic`) VALUES
+(1, 'การสอน');
 
 -- --------------------------------------------------------
 

@@ -23,6 +23,7 @@ app.use('/api/dash',dash)
 const profile = require('./routes/profile')
 app.use('/api/profile',profile)
 
+<<<<<<< HEAD
 //eva api
 
 const selfeva = require('./routes/Eva/selfeva')
@@ -37,6 +38,8 @@ app.use('/api/Eva/score_commit',score_commit)
 const edit_eva = require('./routes/Eva/edit_eva')
 app.use('/api/Eva/edit_eva',edit_eva)
 
+=======
+>>>>>>> 4c7f2b9e9f43808237a5631f98c32030577d8349
 const member = require('./routes/Staff/member')
 app.use('/api/Staff/member',member)
 
@@ -57,6 +60,25 @@ app.use('/api/Staff/commit',commit)
 
 const doc = require('./routes/Staff/doc')
 app.use('/api/Staff/doc',doc)
+<<<<<<< HEAD
+=======
+
+const score_member2 = require('./routes/Staff/score_member')
+app.use('/api/Staff/score_member',score_member2)
+
+const score_commit2 = require('./routes/Staff/score_commit')
+app.use('/api/Staff/score_commit',score_commit2)
+//eva api
+
+const selfeva = require('./routes/Eva/selfeva')
+app.use('/api/Eva/selfeva',selfeva)
+
+const score_member = require('./routes/Eva/score_member')
+app.use('/api/Eva/score_member',score_member)
+
+const score_commit = require('./routes/Eva/score_commit')
+app.use('/api/Eva/score_commit',score_commit)
+>>>>>>> 4c7f2b9e9f43808237a5631f98c32030577d8349
 
 app.use((req,res)=> res.status(404).json({message:'Route not found'}))
 app.listen(3001,()=>{
