@@ -97,7 +97,7 @@ const saveScore = async()=>{
     try {
         await axios.post(`${eva}/selfeva/save`,formData,{headers:{Authorization:`Bearer ${token}`}})
         alert('ประเมินสำเร็จ')
-        await Promise.all([fetchTopics(),fetchUser()])
+        await Promise.all([fecth(),fecthTopic()])
         // window.location.reload()
     } catch (error) {
         console.error('Error POST Score!',error)

@@ -4,11 +4,11 @@
             <v-col cols="12" md="12">
                 <v-card>
                     <v-card-title>
-                        <h1 class="text-center text-h5">เอกสารและคู่มือการประเมินผล</h1>
+                        <h1 class="text-center text-h5">ยืนยันผลการประเมิน</h1>
                     </v-card-title>
                     <v-card-text class="bg-white">
                         <br>
-                        <v-form @submit.prevent="saveMember">
+                        <v-form v-if="!result.signature" @submit.prevent="saveMember">
                             <v-row>
                                 <v-col cols="12" md="6">
                                     <v-text-field label="ชื่อเอกสาร" v-model="name_doc" :error-messages="error.name_doc" prepend-inner-icon="mdi-file-edit"></v-text-field>
@@ -27,13 +27,11 @@
                                 </v-col>
                             </v-row>
                         </v-form>
-                        <v-text-field class="mt-3" v-model="search" label="ค้นหา" prepend-inner-icon="mdi-magnify"></v-text-field>
+                        
                         <v-table class="table mt-3">
                             <thead>
                                 <tr>
                                     <th class="border text-center">ลำดับ</th>
-                                    <th class="border text-center">ชื่อเอกสาร</th>
-                                    <th class="border text-center">วันที่ออกเอกสาร</th>
                                     <th class="border text-center">ไฟล์</th>
                                     <th class="border text-center">จัดการ</th>
                                 </tr>
@@ -42,14 +40,9 @@
                                 <tr v-for="(items,index) in result" :key="items.id_doc">
                                     <td class="border text-center">{{ index+1 }}</td>
                                     <td class="border text-center">{{ items.name_doc }}</td>
-                                    <td class="border text-center">{{ formatDate(items.day_doc) }}</td>
                                     <td class="border text-center">
                                         <v-btn class="text-center text-white ma-2" color="info" prepend-icon="mdi-eye" @click="view(items.file)" size="small">เปิดดู</v-btn>
-                                    </td>
-                                    <td class="border text-center">
-                                        <center>
-                                            <v-btn class="text-center text-white ma-2" color="error" @click="del(items.id_doc)" size="small">ลบ</v-btn>
-                                        </center>
+                                        <v-btn class="text-center text-white ma-2" color="error" @click="del(items.id_doc)" size="small">ลบ</v-btn>
                                     </td>
                                 </tr>
                                 <tr>
@@ -66,15 +59,15 @@
 
 <script setup lang="ts">
 import axios from 'axios'
-import { api,staff } from '../../API/base'
+import { api,commit,staff } from '../../API/base'
 
 
 const error = ref<Record<string,string>>({})
 const file = ref<File | null>(null)
-const dataResult = ref([])
+const result = ref([])
 const name_doc = ref('')
 const search = ref('')
-
+const id_eva = useRoute().params.id_eva
 
 const saveMember = async()=>{
     if(!name_doc.value && !file.value)return alert('กรอกข้อมูลให้ครบถ้วน')
@@ -86,7 +79,7 @@ const saveMember = async()=>{
     formdata.append('file',file.value!)
     formdata.append('name_doc',name_doc.value)
     try {
-        await axios.post(`${staff}/doc/save`,formdata,{headers:{Authorization:`Bearer ${token}`}})
+        await axios.post(`${commit}/signature/${id_eva}`,formdata,{headers:{Authorization:`Bearer ${token}`}})
         alert('ทำรายการสำเร็จ')
         await fetch()
         file.value = null
@@ -100,13 +93,13 @@ const saveMember = async()=>{
 
 const token = import.meta.client ? localStorage.getItem('token'):null
 const view = (file:string)=>{
-    const url = new URL(`/uploads/document/${file}`,api).href
+    const url = new URL(`/uploads/signature/${file}`,commit).href
     window.open(url,'_blank')
 }
 const fetch = async()=>{
     try {
-        const res = await axios.get(`${staff}/doc/show`,{headers:{Authorization:`Bearer ${token}`}})
-        dataResult.value = res.data
+        const res = await axios.get(`${commit}/doc/show`,{headers:{Authorization:`Bearer ${token}`}})
+        result.value = res.data
     } catch (error) {
         console.error("Error get member",error);
         
@@ -114,31 +107,14 @@ const fetch = async()=>{
 }
 
 
-const result = computed(()=>{
-    if(!search.value)return dataResult.value
-    const s = search.value.toLowerCase()
 
-    return dataResult.value.filter((items:any)=>{
-        return(
-            items.name_doc?.toLowerCase().includes(s)
-        )
-    })
-})
 
-const formatDate = (dateStr:string)=>{
-    if(!dateStr)return '-'
-    const date = new Date(dateStr)
-    const day = String(date.getDate()).padStart(2,'0')
-    const month = String(date.getMonth()+1).padStart(2,'0')
-    const year = String(date.getFullYear())
 
-    return `${day}/${month}/${year}`
-}
 
 const del = async(id_doc:number)=>{
     if(!confirm('ต้องการลบข้อมูลชุดนี้ใฃ่หรือไม่'))return
     try {
-        await axios.delete(`${staff}/doc/delete/${id_doc}`,{headers:{Authorization:`Bearer ${token}`}})
+        await axios.delete(`${commit}/signature/${id_eva}`,{headers:{Authorization:`Bearer ${token}`}})
         await fetch()
     } catch (error) {
         console.error("error delete doc",error);

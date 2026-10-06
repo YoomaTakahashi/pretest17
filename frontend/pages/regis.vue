@@ -83,7 +83,7 @@ const form = ref({
 })
 
 const emailRegex = /^[^\s]+@[^\s]+\.[^\s]{2,}$/i
-function validateForm() {
+function validateForm(){
     const f = form.value
     error.value = {}
 
