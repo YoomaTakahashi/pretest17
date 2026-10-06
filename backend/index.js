@@ -18,7 +18,13 @@ const auth = require('./routes/auth')
 app.use('/api/auth',auth)
 
 const profile = require('./routes/profile')
-app.use('/api/profile',auth)
+app.use('/api/profile',profile)
+
+const member = require('./routes/Staff/member')
+app.use('/api/Staff/member',member)
+
+const topic = require('./routes/Staff/topic')
+app.use('/api/Staff/topic',topic)
 
 app.use((req,res)=> res.status(404).json({message:'Route not found'}))
 app.listen(3001,()=>{
