@@ -18,7 +18,7 @@
                                     <v-textarea label="คำอธิบายเพิ่มเติม(ถ้ามี)" rows="2" v-model="indicate.detail_eva" variant="solo-filled" class="mt-2"></v-textarea>
                                     <v-file-input v-model="indicate.file_eva" label="***รองรับเฉพาะนามสกุลไฟล์  .png .jpg .pdf" accept=".png,.jpg,.pdf" variant="solo-filled" @chang="onFilechange($event,topic.id_topic,indicate.id_indicate)"></v-file-input>
                                     <v-select v-if="indicate.check_indicate === 'y'" v-model="indicate.score" label="ใส่คะแนน 1-4 " :items="[1,2,3,4]" variant="solo-filled"></v-select>
-                                    <v-text-field v-else v-model="indicate.score" label="ใส่คะแนน 1-4 " @input="indicate.score > 4 ? indicate.score = 4 :null"  variant="solo-filled" ></v-text-field>
+                                    <v-text-field type="number" min="0" v-else v-model="indicate.score" label="ใส่คะแนน 1-4 " @input="indicate.score > 4 ? indicate.score = 4 :null"  variant="solo-filled" ></v-text-field>
                                 </v-col>
                             </v-row>
                         </v-card>
@@ -76,10 +76,10 @@ const saveScore = async()=>{
     const formData = new FormData()
     const allScore = topics.value.flatMap((t:any) =>
         t.indicates.map((i:any) => {
-        const key = `${t.id_topic}-${i.id_indicate}`
-        const file = fileMap.value[key]
-        if(file)formData.append(`file_${key}`,file)
-        return{
+            const key = `${t.id_topic}-${i.id_indicate}`
+            const file = fileMap.value[key]
+            if(file)formData.append(`file_${key}`,file)
+            return{
                 id_topic:t.id_topic,
                 id_indicate:i.id_indicate,
                 score:i.score,
@@ -97,9 +97,10 @@ const saveScore = async()=>{
     try {
         await axios.post(`${eva}/selfeva/save`,formData,{headers:{Authorization:`Bearer ${token}`}})
         alert('ประเมินสำเร็จ')
-        await Promise.all([fecth(),fecthTopic()])
+        await Promise.all([fetchTopics(),fetchUser()])
+        // window.location.reload()
     } catch (error) {
-        console.error('error post scores',error)
+        console.error('Error POST Score!',error)
     }
 }
 </script>
