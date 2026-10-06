@@ -2,7 +2,8 @@
     <v-container>
         <v-row>
             <v-col cols="12">
-                <v-form v-if="user.status_eva === 1" @submit.prevent="saveScore">
+                <v-alert v-if="user.status_eva === 1 "></v-alert>
+                <v-form v-else-if="user.status_commit === 'n'" @submit.prevent="saveScore">
                     <h1 class="text-h5 font-weight-bold">แบบประเมินตนเอง</h1>
                     <v-card class="pa-2 py-2" :elevation="5" rounded="5">
                         <p>ผู้ใช้งาน : {{ user.fname }} {{ user.lname }}</p>
@@ -15,15 +16,21 @@
                             <v-row v-for="(indicate,i) in topic.indicates" :key="indicate.id_indicate">
                                 <v-col cols="12">
                                     {{ t+1 }}.{{ i+1 }} {{ indicate.name_indicate }} รายระเอียดตัวชี้วัด : {{ indicate.detail_indicate }} น้ำหนักคะแนน : {{ indicate.point_indicate }} คะแนนเต็ม : {{ indicate.point_indicate*4 }}
-                                    <v-textarea label="คำอธิบายเพิ่มเติม(ถ้ามี)" rows="2" v-model="indicate.detail_eva" variant="solo-filled" class="mt-2"></v-textarea>
-                                    <v-file-input v-model="indicate.file_eva" label="***รองรับเฉพาะนามสกุลไฟล์  .png .jpg .pdf" accept=".png,.jpg,.pdf" variant="solo-filled" @chang="onFilechange($event,topic.id_topic,indicate.id_indicate)"></v-file-input>
+                                    <p class="mt-2">รายละเอียด : {{ indicate.detail_eva || '-' }}</p>
+                                    <p class="mt-2"> file : <v class="btn" v-if="indicate.file_eva" size="smail" @click="viweFile(indicate.file_eva)" color="blue"></v><span v-else>ไม่มีไฟล์</span> </p>
                                     <v-select v-if="indicate.check_indicate === 'y'" v-model="indicate.score" label="ใส่คะแนน 1-4 " :items="[1,2,3,4]" variant="solo-filled"></v-select>
-                                    <v-text-field type="number" min="0" v-else v-model="indicate.score" label="ใส่คะแนน 1-4 " @input="indicate.score > 4 ? indicate.score = 4 :null"  variant="solo-filled" ></v-text-field>
+                                    <v-text-field type="number" min="0" v-else-if="indicate.check_indicate === 'n'" v-model="indicate.score" label="ใส่คะแนน 1-4 " @input="indicate.score > 4 ? indicate.score = 4 :null"  variant="solo-filled" ></v-text-field>
                                 </v-col>
                             </v-row>
                         </v-card>
                         </v-col>
                     </v-row>
+                    <div class="mt-4">
+                        <v-card class="pa-2">
+                            <label for="">ข้อเสนอแนะ</label>
+                            <v-textarea label="ถ้ามี" v-model="detail_commit" row="2"></v-textarea>
+                        </v-card>
+                    </div>
                     <div class="text-center mt-3">
                         <v-btn type="submit" color="blue">บันทึกคะแนน</v-btn>
                     </div>
@@ -37,54 +44,50 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import { eva } from '~/API/base';
+import {commit} from '../../API/base';
 
-const user = ref<any>({})
 const topics = ref<any>([])
+const user = ref<any>({})
+const detail_commit = ref('')
+const id_eva = useRoute().params.id_eva
 
-const fecth = async()=>{
+const viweFile = (filename:string) =>{
+    const url = `http://localhost:3001/uploads/evadetail/${filename}`
+    window.open(url,'_blank')
+}
+
+const fetchUser = async()=>{
     const token = localStorage.getItem('token')
     try {
-        const res =await axios.get(`${eva}/selfeva/user`,{headers:{Authorization:`Bearer ${token}`}})
+        const res = await axios.get(`${commit}/save_score/user/${id_eva}`,{headers:{Authorization:`Bearer ${token}`}})
         user.value = res.data
     } catch (error) {
-        console.error('ERROR GET USER!',error)
+        console.error('ERROR GET USER  ',error)
     }
 }
-const fecthTopic = async()=>{
+const fetchTopics = async()=>{
     const token = localStorage.getItem('token')
     try {
-        const res =await axios.get(`${eva}/selfeva/topic`,{headers:{Authorization:`Bearer ${token}`}})
+        const res = await axios.get(`${commit}/save_score/topic/${id_eva}`,{headers:{Authorization:`Bearer ${token}`}})
         topics.value = res.data
     } catch (error) {
-        console.error('ERROR GET TOPIC!',error)
+        console.error('ERROR GET TOPICS  ',error)
     }
 }
 
 onMounted(async()=>{
-    await Promise.all([fecth(),fecthTopic()])
+    Promise.all([fetchUser(),fetchTopics()])
 })
-const fileMap = ref<Record<string,File>>({})
-const onFilechange = (event:Event,id_topic:number,id_indicate:number)=>{
-    const file = (event.target as HTMLInputElement)?.files?.[0]
-    if(!file)return
-    fileMap.value[`${id_topic}-${id_indicate}`] = file
-}
 
 const saveScore = async()=>{
     const token = localStorage.getItem('token')
     const formData = new FormData()
     const allScore = topics.value.flatMap((t:any) =>
         t.indicates.map((i:any) => {
-            const key = `${t.id_topic}-${i.id_indicate}`
-            const file = fileMap.value[key]
-            if(file)formData.append(`file_${key}`,file)
             return{
                 id_topic:t.id_topic,
                 id_indicate:i.id_indicate,
                 score:i.score,
-                detail_eva:i.detail_eva,
-                file_key:file ? `file_${key}` :null
         
             }
         })
@@ -94,11 +97,18 @@ const saveScore = async()=>{
         return
     }
     formData.append('scores',JSON.stringify(allScore))
+    const detail_commitTo = ref('')
+    if(detail_commit.value = detail_commit.value.trim()){
+        detail_commitTo.value = detail_commit.value
+    }else{
+        detail_commitTo.value = 'ไม่มี'
+    }
+    formData.append('detail_commit',detail_commitTo.value)
     try {
-        await axios.post(`${eva}/selfeva/save`,formData,{headers:{Authorization:`Bearer ${token}`}})
+        await axios.post(`${commit}/save_score/save/${id_eva}`,formData,{headers:{Authorization:`Bearer ${token}`}})
         alert('ประเมินสำเร็จ')
         await Promise.all([fetchTopics(),fetchUser()])
-        // window.location.reload()
+        navigateTo('/Commitee/check_confirm',{replace:true})
     } catch (error) {
         console.error('Error POST Score!',error)
     }
