@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Oct 06, 2026 at 08:04 AM
+-- Generation Time: Oct 06, 2026 at 08:14 AM
 -- Server version: 26.7.0
 -- PHP Version: 8.3.35
 
@@ -32,8 +32,31 @@ CREATE TABLE `tb_commit` (
   `id_eva` int NOT NULL,
   `id_member` int NOT NULL,
   `detail_commit` text,
+  `level_commit` varchar(100) NOT NULL,
   `status_commit` varchar(1) NOT NULL,
   `signature` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `tb_commit`
+--
+
+INSERT INTO `tb_commit` (`id_commit`, `id_eva`, `id_member`, `detail_commit`, `level_commit`, `status_commit`, `signature`) VALUES
+(1, 1, 5, NULL, 'ประธาน', 'n', NULL),
+(2, 1, 6, NULL, 'กรรมการ', 'n', NULL),
+(3, 1, 7, NULL, 'เลขา', 'n', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_doc`
+--
+
+CREATE TABLE `tb_doc` (
+  `id_doc` int NOT NULL,
+  `name_doc` varchar(200) NOT NULL,
+  `day_doc` date NOT NULL,
+  `file` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -57,7 +80,7 @@ CREATE TABLE `tb_eva` (
 --
 
 INSERT INTO `tb_eva` (`id_eva`, `id_member`, `id_sys`, `status_eva`, `day_eva`, `total_eva`, `total_commit`) VALUES
-(1, 4, 3, 2, '2026-10-07', NULL, NULL);
+(1, 4, 3, 1, '2026-10-07', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -185,6 +208,12 @@ ALTER TABLE `tb_commit`
   ADD PRIMARY KEY (`id_commit`);
 
 --
+-- Indexes for table `tb_doc`
+--
+ALTER TABLE `tb_doc`
+  ADD PRIMARY KEY (`id_doc`);
+
+--
 -- Indexes for table `tb_eva`
 --
 ALTER TABLE `tb_eva`
@@ -228,7 +257,13 @@ ALTER TABLE `tb_topic`
 -- AUTO_INCREMENT for table `tb_commit`
 --
 ALTER TABLE `tb_commit`
-  MODIFY `id_commit` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id_commit` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `tb_doc`
+--
+ALTER TABLE `tb_doc`
+  MODIFY `id_doc` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tb_eva`
