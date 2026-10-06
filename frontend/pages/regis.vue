@@ -83,7 +83,7 @@ const form = ref({
 })
 
 const emailRegex = /^[^\s]+@[^\s]+\.[^\s]{2,}$/i
-function validateForm(){
+function validateForm()(){
     const f = form.value
     error.value = {}
 
@@ -105,7 +105,7 @@ function validateForm(){
 }
 
 const saveMember = async()=>{
-    if(!validateForm)return
+    if(!validateForm())return
     const formdata = new FormData
     formdata.append('pic_user',pic_user.value!)
     formdata.append('form',JSON.stringify(form.value))
