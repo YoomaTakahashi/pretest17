@@ -2,7 +2,7 @@
     <v-container>
         <v-row justify="center">
             <v-col cols="12" md="8">
-                <v-card color="7d0c14">
+                <v-card color="#7d0c14">
                     <v-card-title>
                         <center><v-img src="/img/logo.png" width="15%" class="mt-3"></v-img></center>
                         <h1 class="text-center text-h5">เข้าสู่ระบบ</h1>
@@ -14,13 +14,13 @@
                         <v-alert v-if="error" type="error" variant="tonal">{{ error }}</v-alert>
                         <v-form @submit.prevent="login">
                             <v-row>
-                                <v-col cols="12" md="6">
+                                <v-col cols="12" md="12">
                                     <v-text-field label="ชื่อผู้ใฃ้" v-model="username" prepend-inner-icon="mdi-account"></v-text-field>
                                 </v-col>
-                                <v-col cols="12" md="6">
+                                <v-col cols="12" md="12">
                                     <v-text-field label="รหัสผ่าน" v-model="password" :prepend-inner-icon="show ? 'mdi-eye':'mdi-eye-off'" :type="showPw ? 'text':'password'" @click:prepend-inner="show = !show , showPw = !showPw"></v-text-field>
                                 </v-col>
-                                <v-col cols="12" md="6">
+                                <v-col cols="12" md="12">
                                     <v-select label="ประเภทสมาชิก" v-model="role" prepend-inner-icon="mdi-account-group" :items="typeR"></v-select>
                                 </v-col>
                             </v-row>

@@ -110,7 +110,7 @@ const saveMember = async()=>{
     formdata.append('pic_user',pic_user.value!)
     formdata.append('form',JSON.stringify(form.value))
     try {
-        await axios.post(`${api}/auht/regis`,formdata)
+        await axios.post(`${api}/auth/regis`,formdata)
         alert('ทำรายการสำเร็จ')
         navigateTo('/',{replace:true})
     } catch (error) {
