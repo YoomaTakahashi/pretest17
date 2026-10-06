@@ -118,7 +118,7 @@ function validateForm(){
 
 const token = import.meta.client ? localStorage.getItem('token'):null
 const saveMember = async()=>{
-    if(!validateForm)return
+    if(!validateForm())return
     const f = form.value
     try {
         f.id_indicate

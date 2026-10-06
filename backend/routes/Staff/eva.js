@@ -6,22 +6,22 @@ const {verifyToken,requireRole} = require('../../middleware/authmiddleware')
 
 router.post('/save',verifyToken,requireRole('ฝ่ายบุคลากร'),async(req,res)=>{
     try {
-        const {id_topic,name_indicate,detail_indicate,point_indicate,check_indicate} = req.body
+        const {id_member,id_sys,day_eva} = req.body
         
-        const [rows] = await db.query(`insert into tb_indicate(id_topic,name_indicate,detail_indicate,point_indicate,check_indicate) values(?,?,?,?,?)`,[id_topic,name_indicate,detail_indicate,point_indicate,check_indicate])
-        res.json(rows,{message:"saveIndicate"})
+        const [rows] = await db.query(`insert into tb_eva(id_member,id_sys,day_eva,status_eva) values(?,?,?,?)`,[id_member,id_sys,day_eva,1])
+        res.json(rows,{message:"saveEva"})
     } catch (error) {
-        console.error("error saveIndicate",error);
-        res.status(500).json({messge:"Error saveIndicate"})
+        console.error("error saveEva",error);
+        res.status(500).json({messge:"Error saveEva"})
         
     }
 })
 
-router.put('/update/:id_indicate',verifyToken,requireRole('ฝ่ายบุคลากร'),async(req,res)=>{
+router.put('/update/:id_eva',verifyToken,requireRole('ฝ่ายบุคลากร'),async(req,res)=>{
     try {
-        const {id_indicate} = req.params
-        const {id_topic,name_indicate,detail_indicate,point_indicate,check_indicate} = req.body
-        const [rows] = await db.query(`update tb_indicate set id_topic=?,name_indicate=?,detail_indicate=?,point_indicate=?,check_indicate=? where id_indicate = ? `,[id_topic,name_indicate,detail_indicate,point_indicate,check_indicate,id_indicate])
+        const {id_eva} = req.params
+        const {id_member,id_sys,day_eva} = req.body
+        const [rows] = await db.query(`update tb_eva set id_member=?,id_sys=?,day_eva=? where id_eva = ? `,[id_member,id_sys,day_eva,id_eva])
         res.json(rows,{message:"update"}) 
         
     } catch (error) {
@@ -31,11 +31,11 @@ router.put('/update/:id_indicate',verifyToken,requireRole('ฝ่ายบุค
     }
 })
 
-router.delete('/delete/:id_indicate',verifyToken,requireRole('ฝ่ายบุคลากร'),async(req,res)=>{
+router.delete('/delete/:id_eva',verifyToken,requireRole('ฝ่ายบุคลากร'),async(req,res)=>{
     try {
-        const {id_indicate} = req.params
+        const {id_eva} = req.params
         
-        const [rows] = await db.query(`delete from tb_indicate where id_indicate=?`,[id_indicate])
+        const [rows] = await db.query(`delete from tb_eva where id_eva=?`,[id_eva])
         res.json(rows,{message:"delete"}) 
 
     } catch (error) {
@@ -48,7 +48,7 @@ router.delete('/delete/:id_indicate',verifyToken,requireRole('ฝ่ายบุ
 router.get('/show',verifyToken,requireRole('ฝ่ายบุคลากร'),async(req,res)=>{
     try {
         
-        const [rows] = await db.query(`select * from tb_topic, tb_indicate where tb_topic.id_topic = tb_indicate.id_topic order by id_indicate desc`)
+        const [rows] = await db.query(`select * from tb_eva e,tb_system s,tb_member m where e.id_sys = s.id_sys and e.id_member = m.id_member  order by id_eva desc`)
         res.json(rows,{message:"show"}) 
 
     } catch (error) {

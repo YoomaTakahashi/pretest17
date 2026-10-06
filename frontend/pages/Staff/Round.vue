@@ -22,7 +22,7 @@
                                 <v-col cols="12" md="6">
                                     <v-text-field label="ปีการประเมิน" v-model="form.year_sys" :error-messages="error.year_sys" type="number"></v-text-field>
                                 </v-col>
-                                <v-col cols="12" md="6">
+                                <v-col cols="12" md="12">
                                     <v-select label="สถานะการประเมิน" v-model="form.status_sys" :error-messages="error.status_sys" :items="[{title:'เปิด',value:'y'},{title:'ปิด',value:'n'}]"></v-select>
                                 </v-col>
                             </v-row>
@@ -100,8 +100,6 @@ const reset = ()=>{
 }
 const result = ref([])
 const search = ref('')
-
-const emailRegex = /^[^\s]+@[^\s]+\.[^\s]{2,}$/i
 function validateForm(){
     const f = form.value
     error.value = {}
@@ -118,7 +116,7 @@ function validateForm(){
 
 const token = import.meta.client ? localStorage.getItem('token'):null
 const saveMember = async()=>{
-    if(!validateForm)return
+    if(!validateForm())return
     const f = form.value
     try {
         f.id_sys
@@ -164,7 +162,7 @@ const formatDate = (dateStr:string)=>{
     if(!dateStr)return '-'
     const date = new Date(dateStr)
     const day = String(date.getDate()).padStart(2,'0')
-    const month = String(date.getMonth()).padStart(2,'0')
+    const month = String(date.getMonth()+1).padStart(2,'0')
     const year = String(date.getFullYear())
 
     return `${day}/${month}/${year}`

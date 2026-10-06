@@ -76,7 +76,7 @@ const dataResult = ref([])
 const search = ref('')
 
 const emailRegex = /^[^\s]+@[^\s]+\.[^\s]{2,}$/i
-function validateForm(){
+function validateForm()(){
     const f = form.value
     error.value = {}
 
@@ -87,7 +87,7 @@ function validateForm(){
 
 const token = import.meta.client ? localStorage.getItem('token'):null
 const saveMember = async()=>{
-    if(!validateForm)return
+    if(!validateForm())return
     const f = form.value
     try {
         f.id_topic
